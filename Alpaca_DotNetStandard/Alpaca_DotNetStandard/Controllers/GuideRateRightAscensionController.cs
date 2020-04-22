@@ -34,14 +34,20 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         }
 
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID,   double GuideRateRightAscension)
+        public MethodResponse Put([FromBody] GuideRateRightAscensionRequest request)
         {
 
             //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Get", "");
-            MyGlobals.Telescope.GuideRateRightAscension = GuideRateRightAscension;
+            MyGlobals.Telescope.GuideRateRightAscension = request.RightAscensionRate;
 
-            return new MethodResponse(ClientTransactionID, ClientID, methodName);
+            return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
         }
+    }
+    public class GuideRateRightAscensionRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public double RightAscensionRate { get; set; }
     }
 }
 

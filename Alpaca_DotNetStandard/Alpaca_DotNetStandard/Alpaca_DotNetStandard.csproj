@@ -253,6 +253,7 @@
     <Compile Include="Controllers\Test1Controller.cs" />
     <Compile Include="Controllers\TrackingController.cs" />
     <Compile Include="Controllers\TrackingRateController.cs" />
+    <Compile Include="Controllers\TrackingRatesController.cs" />
     <Compile Include="Controllers\UnParkController.cs" />
     <Compile Include="Controllers\UtcDateController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

@@ -11,26 +11,27 @@ using Alpaca_Telescope_DotNetStandard;
 namespace Alpaca_Telescope_DotNetStandard.Controllers
 {
     //[Route("api/v1/telescope/{device_number}/[controller]")]
-     
+
     public class trackingController : ApiController
     {
         private string methodName = nameof(trackingController).Substring(0, nameof(trackingController).IndexOf("Controller"));
-        //
+
         //[HttpPut]
         //public async Task<string> PostRawBufferManual()
         //{
         //    string result = await Request.Content.ReadAsStringAsync();
+        //    Console.WriteLine("****   " + result);
         //    return result;
         //}
-        //
+
         [HttpGet]
-        public BoolResponse Get( int ClientID, int ClientTransactionID)
+        public BoolResponse Get(int ClientID, int ClientTransactionID)
         {
             try
             {
-                bool result = MyGlobals.Telescope.Tracking;                
+                bool result = MyGlobals.Telescope.Tracking;
                 //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Get", result.ToString());
-                return  new BoolResponse(ClientTransactionID, ClientID, methodName, result);
+                return new BoolResponse(ClientTransactionID, ClientID, methodName, result);
             }
             catch (Exception ex)
             {
@@ -43,11 +44,19 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         }
 
         [HttpPut]
-        public MethodResponse Put([FromBody] int ClientID, [FromBody] int ClientTransactionID, [FromBody]  bool Tracking)
+        public MethodResponse Put([FromBody] TrackingRequest trackingRequest)
         {
             //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
-            MyGlobals.Telescope.Tracking = Tracking;
-            return new MethodResponse(ClientTransactionID, ClientID, methodName);
+            MyGlobals.Telescope.Tracking = trackingRequest.Tracking;
+            return new MethodResponse(trackingRequest.ClientTransactionID, trackingRequest.ClientID, methodName);
         }
+
+
+    }
+    public class TrackingRequest
+    {
+        public int ClientTransactionID { get; set; }
+        public int ClientID { get; set; }
+        public bool Tracking { get; set; }
     }
 }

@@ -36,11 +36,17 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         }
 
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID,   bool DeclinationRate)
+        public MethodResponse Put([FromBody] DoesRefractionRequest request)
         {
-            return new MethodResponse(ClientTransactionID, ClientID, methodName);
+            MyGlobals.Telescope.DoesRefraction = request.DoesRefraction;
+            return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
         }
 
-
+    }
+    public class DoesRefractionRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public bool DoesRefraction { get; set; }
     }
 }

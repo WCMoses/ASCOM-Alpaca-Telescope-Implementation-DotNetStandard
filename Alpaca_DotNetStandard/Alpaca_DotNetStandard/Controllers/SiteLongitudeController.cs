@@ -9,7 +9,7 @@ using Alpaca_Telescope_DotNetStandard;
 namespace Alpaca_Telescope_DotNetStandard.Controllers
 {
     //[Route("api/v1/telescope/{device_number}/[controller]")]
-     
+
     public class sitelongitudeController : ApiController
     {
         private string methodName = nameof(sitelongitudeController).Substring(0, nameof(sitelongitudeController).IndexOf("Controller"));
@@ -18,7 +18,7 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         {
             try
             {
-                var result =MyGlobals.Telescope.SiteLongitude;
+                var result = MyGlobals.Telescope.SiteLongitude;
                 //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Get", "");
 
                 return new DoubleResponse(ClientTransactionID, ClientID, methodName, result);
@@ -34,15 +34,33 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         }
 
 
-        
+
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID,   double SiteLongitude)
+        public MethodResponse Put([FromBody] SiteLongitudeRequest request)
         {
             //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
-            MyGlobals.Telescope.SiteLongitude = SiteLongitude;
+            try
+            {
+                MyGlobals.Telescope.SiteLongitude = request.SiteLongitude;
+                return new MethodResponse(request.ClientTransactionID, request.ClientID, request.SiteLongitude.ToString());
 
-            return new MethodResponse(ClientTransactionID, ClientID, SiteLongitude.ToString());
+            }
+            catch (Exception ex)
+            {
+
+                var response = new MethodResponse();
+                response.ErrorMessage = ex.Message;
+                response.ErrorNumber = ex.HResult - MyGlobals.ASCOM_ERROR_NUMBER_OFFSET;
+                response.ClientTransactionID = request.ClientTransactionID;
+                return response;
+            }
 
         }
+    }
+    public class SiteLongitudeRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public int SiteLongitude { get; set; }
     }
 }

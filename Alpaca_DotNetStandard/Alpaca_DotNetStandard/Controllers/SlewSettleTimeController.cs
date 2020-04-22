@@ -9,7 +9,7 @@ using Alpaca_Telescope_DotNetStandard;
 namespace Alpaca_Telescope_DotNetStandard.Controllers
 {
     //[Route("api/v1/telescope/{device_number}/[controller]")]
-     
+
     public class slewsettletimeController : ApiController
     {
         private string methodName = nameof(slewsettletimeController).Substring(0, nameof(slewsettletimeController).IndexOf("Controller"));
@@ -35,13 +35,32 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         }
 
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID,   short SlewSettleTime)
+        public MethodResponse Put([FromBody] SlewSettleTimeRequest request)
         {
             //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
-            MyGlobals.Telescope.SlewSettleTime = SlewSettleTime;
+            try
+            {
+                MyGlobals.Telescope.SlewSettleTime = request.SlewSettleTime;
 
-            return new MethodResponse(ClientTransactionID, ClientID, SlewSettleTime.ToString());
+                return new MethodResponse(request.ClientTransactionID, request.ClientID, request.SlewSettleTime.ToString());
+
+            }
+            catch (Exception ex )
+            {
+
+                var response = new MethodResponse();
+                response.ErrorMessage = ex.Message;
+                response.ErrorNumber = ex.HResult - MyGlobals.ASCOM_ERROR_NUMBER_OFFSET;
+                response.ClientTransactionID = request.ClientTransactionID;
+                return response;
+            }
 
         }
+    }
+    public class SlewSettleTimeRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public short SlewSettleTime { get; set; }
     }
 }

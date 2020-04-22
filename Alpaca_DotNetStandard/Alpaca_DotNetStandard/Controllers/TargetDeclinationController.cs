@@ -9,7 +9,7 @@ using Alpaca_Telescope_DotNetStandard;
 namespace Alpaca_Telescope_DotNetStandard.Controllers
 {
     //[Route("api/v1/telescope/{device_number}/[controller]")]
-     
+
     public class targetdeclinationController : ApiController
     {
         private string methodName = nameof(targetdeclinationController).Substring(0, nameof(targetdeclinationController).IndexOf("Controller"));
@@ -34,11 +34,31 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         }
 
         [HttpPut]
-        public MethodResponse Put([FromBody] int ClientID,[FromBody] int ClientTransactionID,[FromBody] double TargetDeclination)
+        public MethodResponse Put([FromBody] targetDeclinationRequest request)
         {
-            //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
-            MyGlobals.Telescope.TargetDeclination = TargetDeclination;
-            return new MethodResponse(ClientTransactionID, ClientID, methodName);
+            try
+            {
+                //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
+                MyGlobals.Telescope.TargetDeclination = request.TargetDeclination;
+                return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
+            }
+            catch (Exception ex)
+            {
+
+                //MyGlobals.Telescope.TraceLogger.LogMessage(methodName, string.Format("Exception: {0}", ex.ToString()));
+                MethodResponse response = new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
+                response.ErrorMessage = ex.Message;
+                response.ErrorNumber = ex.HResult - MyGlobals.ASCOM_ERROR_NUMBER_OFFSET;
+                return response;
+            }
+
         }
+    }
+
+    public class targetDeclinationRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public double TargetDeclination { get; set; }
     }
 }

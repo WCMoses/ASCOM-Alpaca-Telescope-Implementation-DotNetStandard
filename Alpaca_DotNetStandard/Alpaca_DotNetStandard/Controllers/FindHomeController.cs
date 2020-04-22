@@ -15,22 +15,27 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         private string methodName = nameof(findhomeController).Substring(0, nameof(findhomeController).IndexOf("Controller"));
 
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID)
+        public MethodResponse Put([FromBody] FindHomeRequest request)
         {
             try
             {
                 //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
                 MyGlobals.Telescope.FindHome();
-                return new MethodResponse(ClientTransactionID, ClientID, methodName);
+                return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
             }
             catch (Exception ex)
             {
                 //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", string.Format("Exception: {0}", ex.ToString()));
-                var response = new MethodResponse(ClientTransactionID, ClientID, methodName);
+                var response = new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
                 response.ErrorMessage = ex.Message;
                 response.ErrorNumber = ex.HResult - MyGlobals.ASCOM_ERROR_NUMBER_OFFSET;
                 return response;
             }
         }
+    }
+    public class FindHomeRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
     }
 }

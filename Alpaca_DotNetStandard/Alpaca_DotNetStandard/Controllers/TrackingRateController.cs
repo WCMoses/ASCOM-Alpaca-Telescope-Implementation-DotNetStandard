@@ -34,12 +34,31 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
         }
 
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID,   ASCOM.DeviceInterface.DriveRates TrackingRate)
+        public MethodResponse Put([FromBody] TrackingRateRequest request)
         {
+            try
+            {
             //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
-            MyGlobals.Telescope.TrackingRate = TrackingRate;
-            return new MethodResponse(ClientTransactionID, ClientID, methodName);
+            MyGlobals.Telescope.TrackingRate = request.TrackingRate;
+            return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
+            }
+            catch (Exception ex )
+            {
+
+                var response = new MethodResponse();
+                response.ErrorMessage = ex.Message;
+                response.ErrorNumber = ex.HResult - MyGlobals.ASCOM_ERROR_NUMBER_OFFSET;
+                response.ClientTransactionID = request.ClientTransactionID;
+                return response; ;
+            }
+
         }
 
+    }
+    public class TrackingRateRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public ASCOM.DeviceInterface.DriveRates TrackingRate { get; set; }
     }
 }

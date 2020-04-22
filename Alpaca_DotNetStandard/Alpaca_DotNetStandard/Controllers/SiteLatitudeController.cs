@@ -36,12 +36,30 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
 
       
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID,   double SiteLatitude)
+        public MethodResponse Put([FromBody] SiteLatitudeRequest request)
         {
             //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
-            MyGlobals.Telescope.SiteLatitude = SiteLatitude;
+            try
+            {
+            MyGlobals.Telescope.SiteLatitude = request.SiteLatitude;
+            return new MethodResponse(request.ClientTransactionID, request.ClientID, request.SiteLatitude.ToString());
 
-            return new MethodResponse(ClientTransactionID, ClientID, SiteLatitude.ToString());
+            }
+            catch (Exception ex)
+            {
+
+                var response = new MethodResponse();
+                response.ErrorMessage = ex.Message;
+                response.ErrorNumber = ex.HResult - MyGlobals.ASCOM_ERROR_NUMBER_OFFSET;
+                response.ClientTransactionID = request.ClientTransactionID;
+                return response;
+            }
         }
+    }
+    public class SiteLatitudeRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public int SiteLatitude { get; set; }
     }
 }

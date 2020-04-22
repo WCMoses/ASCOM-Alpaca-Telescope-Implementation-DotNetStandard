@@ -1,25 +1,30 @@
-﻿////using System;
-////using System.Collections.Generic;
-////using ASCOM.DeviceInterface;
+﻿//using System;
+//using System.Collections.Generic;
+//using ASCOM.DeviceInterface;
 
-//namespace Alpaca_Telescope_DotNetStandard
-//{
-//    public class TrackingRatesResponse : RestResponseBase
-//    {
-//        private List<DriveRates> rates;
+using ASCOM.DeviceInterface;
+using System.Collections.Generic;
 
-//        public TrackingRatesResponse() { }
+namespace Alpaca_Telescope_DotNetStandard
+{
+    public class TrackingRatesResponse : RestResponseBase
+    {
+        private List<DriveRates> rates;
 
-//        public TrackingRatesResponse(int clientTransactionID, int transactionID, string method)
-//        {
-//            base.ServerTransactionID = transactionID;
-//            base.ClientTransactionID = clientTransactionID;
-//        }
+        public TrackingRatesResponse() { }
 
-//        public List<DriveRates> Rates
-//        {
-//            get { return rates; }
-//            set { rates = value; }
-//        }
-//    }
-//}
+        public TrackingRatesResponse(int clientTransactionID, int transactionID, string method)
+        {
+            base.ServerTransactionID = transactionID;
+            base.ClientTransactionID = clientTransactionID;
+           
+        }
+        public ITrackingRates Value { get; set; }
+
+        public List<DriveRates> Rates
+        {
+            get => rates;
+            set { rates = value; }
+        }
+    }
+}

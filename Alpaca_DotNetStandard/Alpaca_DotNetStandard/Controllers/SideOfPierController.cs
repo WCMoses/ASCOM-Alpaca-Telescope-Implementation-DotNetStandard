@@ -37,14 +37,19 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
 
         // PUT: api/SideOfPier/5
         [HttpPut]
-        public PierSideResponse Put(int ClientID, int ClientTransactionID,   ASCOM.DeviceInterface.PierSide SideOfPier)
+        public PierSideResponse Put([FromBody] SideOfPierRequest request)
         {
             //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
-            MyGlobals.Telescope.SideOfPier = SideOfPier;
+            MyGlobals.Telescope.SideOfPier = request.SideOfPier;
 
-            return new PierSideResponse(ClientTransactionID, ClientID, SideOfPier);
+            return new PierSideResponse(request.ClientTransactionID, request.ClientID, request.SideOfPier);
         }
 
-
+    }
+    public class SideOfPierRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public ASCOM.DeviceInterface.PierSide SideOfPier { get; set; }
     }
 }

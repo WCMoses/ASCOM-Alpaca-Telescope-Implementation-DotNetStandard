@@ -38,16 +38,33 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
 
        
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID,   string dateTime)
+        public MethodResponse Put([FromBody] UtcDateRequest request)
         {
             //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Put", "");
-            if (dateTime !=null)
+            try
             {
-                 MyGlobals.Telescope.UTCDate = DateTime.Parse(dateTime);
+            if (request.DateTime !=null)
+            {
+                 MyGlobals.Telescope.UTCDate = DateTime.Parse(request.DateTime);
             }
            
-            return new MethodResponse(ClientTransactionID, ClientID, methodName);
+            return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
+            }
+            catch (Exception ex)
+            {
+                MethodResponse response = new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
+                response.ErrorMessage = ex.Message;
+                response.ErrorNumber = ex.HResult - MyGlobals.ASCOM_ERROR_NUMBER_OFFSET;
+                return response;
+            }
+
         }
 
+    }
+    public class UtcDateRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public string DateTime { get; set; }
     }
 }

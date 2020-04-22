@@ -36,11 +36,18 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
 
         // PUT: api/DeclinationRate/5
         [HttpPut]
-        public MethodResponse Put(int ClientID, int ClientTransactionID,   double DeclinationRate)
+        public MethodResponse Put([FromBody] DeclinationRateRequest request)
         {
-            return new MethodResponse(ClientTransactionID, ClientID, methodName);
+            MyGlobals.Telescope.DeclinationRate = request.DeclinationRate;
+            return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
         }
 
 
+    }
+    public class DeclinationRateRequest
+    {
+        public int ClientID { get; set; }
+        public int ClientTransactionID { get; set; }
+        public double DeclinationRate { get; set; }
     }
 }
