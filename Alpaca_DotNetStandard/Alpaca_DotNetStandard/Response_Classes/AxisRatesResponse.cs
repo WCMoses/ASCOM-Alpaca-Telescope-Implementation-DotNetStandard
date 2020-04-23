@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ASCOM.DeviceInterface;
 
 namespace Alpaca_Telescope_DotNetStandard
 {

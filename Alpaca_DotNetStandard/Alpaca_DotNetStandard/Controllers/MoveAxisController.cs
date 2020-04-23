@@ -22,7 +22,17 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
             try
             {
                 //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " PUT", "");
-                MyGlobals.Telescope.MoveAxis(request.Axis, request.Rate);
+                TelescopeAxes axis = TelescopeAxes.axisPrimary;
+ 
+                if (request.Axis == 2)
+                {
+                    axis = TelescopeAxes.axisSecondary;
+                }
+                if (request.Axis == 3)
+                {
+                    axis = TelescopeAxes.axisTertiary;
+                }
+                MyGlobals.Telescope.MoveAxis(axis, request.Rate);
 
                 return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
             }
@@ -43,7 +53,7 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
     {
         public int ClientID { get; set; }
         public int ClientTransactionID { get; set; }
-        public TelescopeAxes Axis { get; set; }
+        public int Axis { get; set; }
         public double Rate { get; set; }
     }
 }
