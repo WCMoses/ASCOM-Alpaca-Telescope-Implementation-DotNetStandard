@@ -42,7 +42,7 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
             try
             {
             MyGlobals.Telescope.SiteLatitude = request.SiteLatitude;
-            return new MethodResponse(request.ClientTransactionID, request.ClientID, request.SiteLatitude.ToString());
+            return new MethodResponse(request.ClientTransactionID, request.ClientID, methodName);
 
             }
             catch (Exception ex)

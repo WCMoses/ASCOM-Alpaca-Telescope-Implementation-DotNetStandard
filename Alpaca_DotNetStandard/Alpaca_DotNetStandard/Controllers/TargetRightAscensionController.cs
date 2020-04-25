@@ -26,7 +26,7 @@ namespace Alpaca_Telescope_DotNetStandard.Controllers
             catch (Exception ex)
             {
                 //MyGlobals.Telescope.TraceLogger.LogMessage(methodName + " Get", string.Format("Exception: {0}", ex.ToString()));
-                DoubleResponse response = new DoubleResponse(ClientTransactionID, ClientID, methodName, 0);
+                DoubleResponse response = new DoubleResponse(ClientTransactionID, ClientID, methodName, -1);
                 response.ErrorMessage = ex.Message;
                 response.ErrorNumber = ex.HResult - MyGlobals.ASCOM_ERROR_NUMBER_OFFSET;
                 return response;
